@@ -163,6 +163,7 @@ int execution(char *cmd){
 				FILE* fichier= fopen(command[k+1], "r"); // Ouverture du fichier en mode lecture, nous obtiendrons le descripteur de fichier à l'aide de fileno()
 				dup2(fileno(fichier),STDIN_FILENO); // La fonction dup2 va copier le descripteur de fichier recu en premier argument sur le second
 				// Cela signifie que le contenu du fichier sera redirigé dans STDIN
+				// Lorsqu'on sort du fork, le descripteur de fichier du pere correspondant à STDIN et STOUT n'a pas été changé et on reviens à un affichage classique
 				fclose(fichier); // On peut ensuite fermer le fichier
 				inp=1;
 			}
@@ -170,6 +171,7 @@ int execution(char *cmd){
 				FILE* fichier= fopen(command[k+1], "w"); // Cette fois ci on ouvre le fichier en mode ecriture
 				dup2(fileno(fichier),STDOUT_FILENO); // La fonction dup2 va copier le descripteur de fichier renvoyé par fileno() sur STDOUT
 				// Cela signifie que lorsque les fonctions renvoie du texte sur STDOUT, celui-ci sera en réalité écrit dans le fichier
+				// Lorsqu'on sort du fork, le descripteur de fichier du pere correspondant à STDIN et STOUT n'a pas été changé et on reviens à un affichage classique
 				fclose(fichier);
 				inp=1;
 			}
